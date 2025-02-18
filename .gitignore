@@ -1,0 +1,7 @@
+.DS_Store
+venv/*
+data/*
+**/__pycache__
+src/saved_models/*
+**/.ipynb_checkpoints
+oxford-iiit-pets-segmentation-using-pytorch-segnet-and-depth-wise-separable-convs(2).ipynb
