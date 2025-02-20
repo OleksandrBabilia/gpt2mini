@@ -1,0 +1,4 @@
+Nvidia gpu optimization:
+1) Base version float32 -> 6900 tok/sec
+2) tensor float32 -> 9500 tok/sec
+3) Mixed pres. tensor cores bfloat16 -> 12300 tok/sec
