@@ -6,7 +6,6 @@ from models.gpt import GPT
 from utils.dataloader import DataLoaderLite
  
 if __name__ == "__main__":
-    # model = GPT.from_pretrained("gpt2")
     device = "cpu"
     if torch.mps.is_available():
         device = "mps"
@@ -19,18 +18,6 @@ if __name__ == "__main__":
 
     num_return_sequences = 5
     max_length = 30
-
-    # enc = tiktoken.get_encoding("gpt2")
-    # with open("../data/input.txt") as f:
-    #     text = f.read()
-    # text = text[:1000]
-    # tokens = enc.encode(text)
-
-    # B, T = 4, 32
-    # buf = torch.tensor(tokens[:B*T + 1])
-    # buf = buf.to("cuda")
-    # x = buf[:-1].view(B, T)
-    # y = buf[1:].view(B, T)
 
     train_loader = DataLoaderLite(B=4, T=32)
 
