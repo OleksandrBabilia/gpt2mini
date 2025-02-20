@@ -1,33 +1,43 @@
 import torch
 from torch.nn import functional as F
-import tiktoken
 
 from configs.gptconfig import GPTConfig 
 from models.gpt import GPT
+from utils.dataloader import DataLoaderLite
  
 if __name__ == "__main__":
     # model = GPT.from_pretrained("gpt2")
+    device = "cpu"
+    if torch.mps.is_available():
+        device = "mps"
+    elif torch.cuda.is_available():
+        device = "cuda"
+    print(f"Using {device}")
     model = GPT(GPTConfig())
-    model.to("cuda")
-    print("model loaded")
+    model.to(device)
+    print("Model loaded")
 
     num_return_sequences = 5
     max_length = 30
 
-    enc = tiktoken.get_encoding("gpt2")
-    with open("../data/input.txt") as f:
-        text = f.read()
-    text = text[:1000]
-    tokens = enc.encode(text)
+    # enc = tiktoken.get_encoding("gpt2")
+    # with open("../data/input.txt") as f:
+    #     text = f.read()
+    # text = text[:1000]
+    # tokens = enc.encode(text)
 
-    B, T = 4, 32
-    buf = torch.tensor(tokens[:B*T + 1])
-    buf = buf.to("cuda")
-    x = buf[:-1].view(B, T)
-    y = buf[1:].view(B, T)
+    # B, T = 4, 32
+    # buf = torch.tensor(tokens[:B*T + 1])
+    # buf = buf.to("cuda")
+    # x = buf[:-1].view(B, T)
+    # y = buf[1:].view(B, T)
+
+    train_loader = DataLoaderLite(B=4, T=32)
 
     optimizer = torch.optim.AdamW(model.parameters(), lr=3e-4)
     for i in range(50):
+        x, y = train_loader.next_batch()
+        x, y = x.to(device), y.to(device)
         optimizer.zero_grad()
         logits, loss = model(x, y)
         loss.backward()
