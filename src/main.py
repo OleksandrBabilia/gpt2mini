@@ -3,7 +3,7 @@ from torch.nn import functional as F
 import tiktoken
 
 from configs.gptconfig import GPTConfig 
-from models.parts import GPT
+from models.gpt import GPT
  
 if __name__ == "__main__":
     # model = GPT.from_pretrained("gpt2")
