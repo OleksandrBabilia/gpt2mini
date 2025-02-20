@@ -54,6 +54,25 @@ class GPT(nn.Module):
                 torch.nn.init.zeros_(module.bias)
         elif isinstance(module, nn.Embedding):
             torch.nn.init.normal_(module.weight, mean=0.0, std=0.02)
+
+    def configure_optimizer(self, weight_decay, learning_rate, device):
+        param_dict = {pn: p for pn, p in self.named_parameters()}
+        param_dict = {pn: p for pn, p in param_dict.items() if p.requires_grad}
+
+        decay_params = [p for _, p in param_dict.items() if p.dim() >= 2]
+        nodecay_params = [p for _, p in param_dict.items() if p.dim() < 2]
+        optim_group = [
+            {"params": decay_params, "weight_deacy": weight_decay},
+            {"params": nodecay_params, "weight_deacy": 0.0},
+        ]
+
+        num_decay_params = sum(p.numel() for p in decay_params)
+        num_nodecay_params = sum(p.numel() for p in nodecay_params)
+        print(f"Number of decayed parameters tensors: {len(decay_params)} with {num_decay_params} parameters")
+        print(f"Number of no decayed parameters tensors: {len(nodecay_params)} with {num_nodecay_params} parameters")
+
+        optimizer = torch.optim.AdamW(optim_group, lr=learning_rate, betas=(0.9, 0.95), eps=1e-8, fused=True)
+        return optimizer 
      
     @classmethod
     def from_pretrained(cls, model_type):
