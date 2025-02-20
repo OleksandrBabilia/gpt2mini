@@ -1,4 +1,9 @@
+Batch=2, Max Token Lengths=1024
+
 Nvidia gpu optimization:
-1) Base version float32 -> 6900 tok/sec
-2) tensor float32 -> 9500 tok/sec
-3) Mixed pres. tensor cores bfloat16 -> 12300 tok/sec
+1) Base version float32 -> 6900 tok/sec, 300ms
+2) tensor float32 -> 9500 tok/sec. 300ms
+3) Mixed precision tensor cores + bfloat16 -> 12300 tok/sec, 167ms 
+4) Mixed precision tensor cores + bfloat16 + compile -> 18800 tok/sec, 108ms 
+5) Mixed precision tensor cores + bfloat16 + compile + flashattention -> 22900 tok/sec, 89ms 
+6) Mixed precision tensor cores + bfloat16 + compile + flashattention + even params -> 23700 tok/sec, 86ms 

@@ -15,6 +15,7 @@ if __name__ == "__main__":
     print(f"Using {device}")
     model = GPT(GPTConfig())
     model.to(device)
+    model = torch.compile(model)
     print("Model loaded")
 
     num_return_sequences = 5
