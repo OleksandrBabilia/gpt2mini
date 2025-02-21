@@ -50,7 +50,9 @@ if __name__ == "__main__":
         print(f"Total desired batch size: {total_batch_size}")
         print(f"=> calulated gradient accumulation steps: {grad_accum_step}")
 
-    train_loader = DataLoaderLite(B=2, T=1024, process_rank=ddp_rank, num_processes=ddp_world_size)
+    train_loader = DataLoaderLite(B=2, T=1024, process_rank=ddp_rank, num_processes=ddp_world_size, split="train",
+                                  master_process=master_process, data_path_folder="../data/edu_fineweb10B")
+    
     torch.set_float32_matmul_precision("high")
     optimizer = raw_model.configure_optimizer(weight_decay=0.1, learning_rate=6e-4, device=device)
 

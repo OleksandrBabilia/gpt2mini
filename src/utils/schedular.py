@@ -2,8 +2,8 @@ import math
 
 MAX_LR = 6e-4
 MIN_LR = MAX_LR * 0.1
-WARMUP_STEPS = 10
-MAX_STEPS = 50
+WARMUP_STEPS = 715
+MAX_STEPS = 19073
 
 def get_lr(it):
     if it < WARMUP_STEPS:
