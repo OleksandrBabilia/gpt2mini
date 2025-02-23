@@ -24,7 +24,7 @@ class DataLoaderLite:
                 print(f"Found {len(shards)} shards for split {split}")
             
             self.current_shard = 0
-            self.tokens = self.load_tokens[self.shards[self.current_shard]]
+            self.tokens = self.load_tokens(self.shards[self.current_shard])
             
 
         else:
@@ -57,7 +57,7 @@ class DataLoaderLite:
         
         return x, y
     
-    def load_tokens(filename):
+    def load_tokens(self, filename):
         npt = np.load(filename)
         ptt = torch.tensor(npt, dtype=torch.long)
         return ptt

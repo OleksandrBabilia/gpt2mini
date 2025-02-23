@@ -84,7 +84,7 @@ if __name__ == "__main__":
         t1 = time.time()
         dt = (t1 - t0) * 1000
         tokens_per_second = (train_loader.B * train_loader.T * grad_accum_step * ddp_world_size) / (t1 - t0)
-        print(f"step {step} | loss {loss_acum.item():.4f} | norm: {norm:.4f} | lr {lr:.4f}| dt: {dt:.2f}ms | tok/sec: {tokens_per_second:.2f}")
+        print(f"step {step} | loss {loss_acum.item():.4f} | norm: {norm:.4f} | lr {lr:.4e}| dt: {dt:.2f}ms | tok/sec: {tokens_per_second:.2f}")
     
     if ddp:
         dist.destroy_process_group()

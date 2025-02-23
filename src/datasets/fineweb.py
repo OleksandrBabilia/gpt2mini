@@ -3,7 +3,7 @@ import multiprocessing as mp
 import numpy as np
 import tiktoken
 from datasets import load_dataset
-import tqdm
+from tqdm import tqdm
 
 LOCAL_DIR = "../../data/edu_fineweb10B"
 REMOTE_NAME = "sample-10BT"
@@ -22,7 +22,7 @@ def tokenize(doc):
     tokens.extend(enc.encode_ordinary(doc["text"]))
 
     tokens_np = np.array(tokens)
-    assert (0 <= tokens_np).all() and (tokens_np , 2**16).all(), "token dict too large for uint16"
+    assert (0 <= tokens_np).all() and (tokens_np < 2**16).all(), "token dict too large for uint16"
     tokens_np_uint16 = tokens_np.astype(np.uint16)
 
     return tokens_np_uint16
@@ -43,7 +43,7 @@ with mp.Pool(nprocs) as pool:
             token_count += len(tokens)
 
             if progress_bar is None:
-                progress_bar = tqdm(total=SHARD_SIZE, uint="tokens", desc=f"Shard {shard_index}")
+                progress_bar = tqdm(total=SHARD_SIZE, unit="tokens", desc=f"Shard {shard_index}")
             progress_bar.update(len(tokens))
         else:
             split = "val" if shard_index ==0 else "train"
