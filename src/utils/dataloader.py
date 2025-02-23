@@ -24,7 +24,6 @@ class DataLoaderLite:
                 print(f"Found {len(shards)} shards for split {split}")
             
             self.current_shard = 0
-            self.tokens = self.load_tokens(self.shards[self.current_shard])
             
 
         else:
@@ -38,7 +37,7 @@ class DataLoaderLite:
             print(f"Loaded {len(self.tokens)} tokens")
             print(f"1 epoch {len(self.tokens) // (B*T)} batches")
 
-        self.current_position = self.B * self.T * self.process_rank
+        self.reset()
     
     def next_batch(self):
         B, T = self.B, self.T
@@ -61,3 +60,8 @@ class DataLoaderLite:
         npt = np.load(filename)
         ptt = torch.tensor(npt, dtype=torch.long)
         return ptt
+    
+    def reset(self):
+        self.current_shard = 0
+        self.tokens = self.load_tokens(self.shards[self.current_shard])
+        self.current_position = self.B * self.T * self.process_rank
